@@ -30,3 +30,12 @@ const config: Config = {
   plugins: [require('@tailwindcss/forms')],
 };
 export default config;
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{html,js}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
