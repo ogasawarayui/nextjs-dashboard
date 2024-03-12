@@ -1,3 +1,4 @@
+import { formatCurrency } from './utils';
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 import {
@@ -6,10 +7,9 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  User,
   Revenue,
+  User,
 } from './definitions';
-import { formatCurrency } from './utils';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -26,9 +26,9 @@ export async function fetchRevenue() {
     console.log('Data fetch completed after 3 seconds.');
 
     return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch revenue data: ${error.message}`);
   }
 }
 
@@ -37,8 +37,8 @@ export async function fetchLatestInvoices() {
   try {
 
     const likes = 100;
-    const { rows, fields } =
-      await sql`SELECT * FROM posts WHERE likes > ${likes} LIMIT 5;`;
+    //const { rows, fields } =
+      //await sql`SELECT * FROM posts WHERE likes > ${likes} LIMIT 5;`;
 
     // Fetch the last 5 invoices, sorted by date
     const data = await sql<LatestInvoiceRaw>`
@@ -56,9 +56,9 @@ export async function fetchLatestInvoices() {
       amount: formatCurrency(invoice.amount),
     }));
     return latestInvoices;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch the latest invoices: ${error.message}`);
   }
 }
 
@@ -92,9 +92,9 @@ export async function fetchCardData() {
       totalPaidInvoices,
       totalPendingInvoices,
     };
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch card data: ${error.message}`);
   }
 }
 
@@ -129,9 +129,9 @@ export async function fetchFilteredInvoices(
     `;
 
     return invoices.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch invoices: ${error.message}`);
   }
 }
 
@@ -151,13 +151,13 @@ export async function fetchInvoicesPages(query: string) {
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of invoices.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch total number of invoices: ${error.message}`);
   }
 }
 
-export async function fetchInvoiceById(quer: string) {
+export async function fetchInvoiceById(id: string) {
   noStore();
   try {
     const data = await sql<InvoiceForm>`
@@ -177,9 +177,9 @@ export async function fetchInvoiceById(quer: string) {
     }));
     console.log(invoice); // Invoice is an empty array []
     return invoice[0];
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoice.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch invoice: ${error.message}`);
   }
 }
 
@@ -195,9 +195,9 @@ export async function fetchCustomers() {
 
     const customers = data.rows;
     return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch all customers: ${error.message}`);
   }
 }
 
@@ -229,9 +229,9 @@ export async function fetchFilteredCustomers(query: string) {
     }));
 
     return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+  } catch (error: any) {
+    console.error('Database Error:', error.message);
+    throw new Error(`Failed to fetch customer table: ${error.message}`);
   }
 }
 
@@ -239,8 +239,8 @@ export async function getUser(email: string) {
   try {
     const user = await sql`SELECT * FROM users WHERE email=${email}`;
     return user.rows[0] as User;
-  } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
+  } catch (error: any) {
+    console.error('Failed to fetch user:', error.message);
+    throw new Error(`Failed to fetch user: ${error.message}`);
   }
 }

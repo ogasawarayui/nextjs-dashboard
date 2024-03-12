@@ -1,10 +1,11 @@
 import Form from '@/app/ui/invoices/edit-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchCustomers } from '@/app/lib/data';
+import { customers } from '@/app/lib/placeholder-data';
+import { fetchInvoiceById } from '@/app/lib/date';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
-  export default async function Page() {
+  const invoice = await fetchInvoiceById(id);
     return (
       <main>
         <Breadcrumbs

@@ -5,22 +5,22 @@ import { CreateInvoice } from '@/app/ui/invoices/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
-import { fetchInvoicesPages } from '@/app/lib/data';
 import { Metadata } from 'next';
+import { fetchInvoicesPages } from '@/app/lib/date';
 
 export const metadata: Metadata = {
   title: 'Invoices | Acme Dashboard',
 };
 
-export default async function Page() {
-  searchParams,
-}: {
+
+PageProps {
   searchParams ?: {
     query?: string;
     page?: string;
   };
-} {
+}
   const query = searchParams?.query || '';
+
   const currentPage = Number(searchParams?.page) || 1;
 
   const totalPages = await fetchInvoicesPages(query);
@@ -45,4 +45,3 @@ export default async function Page() {
   export const metadata: Metadata = {
     title: 'Invoices',
   };
-}
