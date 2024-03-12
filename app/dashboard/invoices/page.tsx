@@ -7,18 +7,16 @@ import { Suspense } from 'react';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Metadata } from 'next';
 import { fetchInvoicesPages } from '@/app/lib/date';
+import { PageProps } from '@/.next/types/app/layout';
+import { string } from 'zod';
 
 export const metadata: Metadata = {
   title: 'Invoices | Acme Dashboard',
 };
 
 
-PageProps {
-  searchParams ?: {
-    query?: string;
-    page?: string;
-  };
-}
+export default async function Page({ searchParams }: PageProps) {
+
   const query = searchParams?.query || '';
 
   const currentPage = Number(searchParams?.page) || 1;
@@ -42,6 +40,4 @@ PageProps {
       </div>
     </div>
   );
-  export const metadata: Metadata = {
-    title: 'Invoices',
-  };
+}
